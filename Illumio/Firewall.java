@@ -151,13 +151,12 @@ public class Firewall {
             tf = Integer.parseInt(port) == p;
         }
         dir = dir.replace(" ", "");
-        System.out.println("dir : " + Objects.equals(direction,dir));
-        System.out.println("file dir: " + direction + " input dir: "+ dir);
+        System.out.println("dir : " + direction.replaceAll("\\P{Print}","").equals(dir.trim().replaceAll("\\P{Print}","")));
         System.out.println("prot : " + prot.equals(protocol));
         System.out.println("port : " + tf);
         System.out.println("ip : " + IPnumberOrRange(IPNumber));
 
-        if (dir.equals(direction) && prot.equals(protocol)) {
+        if (dir.replaceAll("\\P{Print}","").equals(direction.replaceAll("\\P{Print}","")) && prot.equals(protocol)) {
             if (portRange) {
                 if (startPortRange <= p && p <= endPortRange) {
                     return IPnumberOrRange(IPNumber);
@@ -184,5 +183,11 @@ public class Firewall {
 
         Firewall fw4  =  new Firewall("Test4.csv");
         System.out.println(fw4.accept_packet(inbound, "tcp", 80, "192.168.1.2"));
+
+        Firewall fw5 = new Firewall("Test3.csv");
+        System.out.println(fw5.accept_packet("inbound", "udp", 53, "192.168.2.1"));
+        
+        Firewall fw6 = new Firewall("Test2.csv");
+        System.out.println(fw6.accept_packet("outbound", "tcp", 10234, "192.168.10.11"));
     }
 }
